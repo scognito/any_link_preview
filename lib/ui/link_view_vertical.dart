@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 class LinkViewVertical extends StatelessWidget {
@@ -65,31 +67,36 @@ class LinkViewVertical extends StatelessWidget {
             fontWeight: FontWeight.w400,
           );
 
+      ImageProvider img = NetworkImage(imageUri);
+      if(imageUri.startsWith('data:image')){
+        img = MemoryImage(base64Decode(imageUri.substring(imageUri.indexOf('base64') + 7)));
+      }
+
       return InkWell(
           onTap: () => onTap(url),
           child: Column(
             children: <Widget>[
               showMultiMedia!
                   ? Expanded(
-                      flex: 2,
-                      child: imageUri == ""
-                          ? Container(color: bgColor ?? Colors.grey)
-                          : Container(
-                              padding: EdgeInsets.only(bottom: 15),
-                              decoration: BoxDecoration(
-                                borderRadius: radius == 0
-                                    ? BorderRadius.zero
-                                    : BorderRadius.only(
-                                        topLeft: Radius.circular(12),
-                                        topRight: Radius.circular(12),
-                                      ),
-                                image: DecorationImage(
-                                  image: NetworkImage(imageUri),
-                                  fit: BoxFit.fitWidth,
-                                ),
-                              ),
-                            ),
-                    )
+                flex: 2,
+                child: imageUri == ""
+                    ? Container(color: bgColor ?? Colors.grey)
+                    : Container(
+                  padding: EdgeInsets.only(bottom: 15),
+                  decoration: BoxDecoration(
+                    borderRadius: radius == 0
+                        ? BorderRadius.zero
+                        : BorderRadius.only(
+                      topLeft: Radius.circular(12),
+                      topRight: Radius.circular(12),
+                    ),
+                    image: DecorationImage(
+                      image: img,
+                      fit: BoxFit.fitWidth,
+                    ),
+                  ),
+                ),
+              )
                   : SizedBox(height: 5),
               _buildTitleContainer(
                   _titleTS, computeTitleLines(layoutHeight, layoutWidth)),

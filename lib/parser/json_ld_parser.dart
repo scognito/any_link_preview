@@ -18,7 +18,7 @@ class JsonLdParser with BaseMetaInfo {
         ?.querySelector("script[type='application/ld+json']")
         ?.innerHtml;
     if (data == null) return null;
-    var d = jsonDecode(data);
+    var d = jsonDecode(data.replaceAll('\n', ' '));
     return d;
   }
 
